@@ -1,0 +1,45 @@
+#init-button {
+	display: block;
+	margin: 10px auto;
+	padding: 20px 30px;
+	background-color: #62d162;
+	font-size: 140%;
+	border-width: 0px;
+	border-radius: 4px;
+	transition: background-color 450ms;
+}
+
+#init-button:hover {
+	background-color: #24b624;
+}
+
+#init-button:active {
+	background-color: #029602;
+}
+
+#grid-master {
+	display: grid;
+	background-color: #62d162;
+	column-gap: 3px;
+	row-gap: 3px;
+	align-content: center;
+	justify-content: center;
+	width: auto;
+}
+
+.grid-button {
+	width: 40px;
+	height: 40px;
+	background-color: #e88f46;
+	transition: background-color 450ms;
+	border: 0px;
+	border-radius: 2px;
+}
+
+.grid-button:hover {
+	background-color: #c87038;
+}
+
+.grid-button:active {
+	background-color: #c06030;
+}
