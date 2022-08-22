@@ -1,5 +1,5 @@
 let ROWS = 12, COLS = 10, NMIN = 16;
-let GRID = {}, F_CL = true; PLAY = false;
+let GRID = {}, F_CL = true; PLAY = false; FLAG = false;
 
 max = (a, b) => (a > b) ? a : b;
 min = (a, b) => (a < b) ? a : b;
@@ -20,7 +20,7 @@ function first_click(row, col) {
 			}
 		}
 		if (check) mine_locn.push( [r, c] );
-		GRID[`${r} ${c}`].mine = true;
+		grd(r, c).mine = true;
 	}
 	console.log(mine_locn);
 }
@@ -32,7 +32,7 @@ function click(row, col) {
 		return;
 	}
 	//no clicking clicked button
-	if (GRID[`${row} ${col}`].opened) {
+	if (grd(row, col).opened) {
 		console.log("Repeated click");
 		return;
 	};
@@ -42,8 +42,19 @@ function click(row, col) {
 		F_CL = false;
 		first_click(row, col);
 	}
-
-	if (GRID[`${row} ${col}`].mine) {
+	//flag
+	if (FLAG){
+		grd(row, col).btn.innerHTML = (grd(row, col).btn.innerHTML == "F") ? "" : "F";
+		grd(row, col).flagged = !grd(row, col).flagged
+		return ;
+	}
+	//no touching a button with flag on
+	if (grd(row, col).flagged) {
+		console.log("Flag on. No touching");
+		return ;
+	}
+	//mine go kaboom
+	if (grd(row, col).mine) {
 		for (let r=1; r<ROWS; r++) {
 			for (let c=1; c<COLS; c++) {
 				if (!grd(r, c).flagged && grd(r, c).mine) {
@@ -55,15 +66,16 @@ function click(row, col) {
 		PLAY = false;
 		return;
 	}
-
+	//ple like a pleb
 	let count = 0;
 	for (let i = max(row-1, 1); i <= min(row+1, ROWS); i++){
 		for (let j = max(col-1, 1); j <= min(col+1, COLS); j++) {
-			if (GRID[`${i} ${j}`].mine && !(i == row && j == col)) count++;
+			if (grd(i, j).mine && !(i == row && j == col)) count++;
 		}
 	}
-	GRID[`${row} ${col}`].btn.innerHTML = `${count}`;
-	GRID[`${row} ${col}`].neighbour = count;
+	grd(row, col).btn.innerHTML = `${count}`;
+	grd(row, col).neighbour = count;
+	grd(row, col).opened = true;
 }
 
 //start button function
@@ -79,6 +91,15 @@ window.document.getElementById("init-button").onclick = () => {
 	//make new grid
 	let new_grid = document.createElement("div");
 	new_grid.id = "grid-master";
+	let flag_btn = document.createElement("button");
+	flag_btn.innerHTML = "&#x2691";
+	flag_btn.className = "flag-button";
+	flag_btn.onclick = () => {
+		FLAG = !FLAG;
+		flag_btn.className = (flag_btn.className == "flag-button") ? "flagged-button" : "flag-button";
+		console.log("Clicked", flag_btn, "FLAG is", FLAG);
+	};
+	new_grid.appendChild(flag_btn);
 	for (let row=0; row<ROWS; row++) {
 		for (let col=0; col<COLS; col++) {
 			//generate buttons and append them to grid element
@@ -101,4 +122,5 @@ window.document.getElementById("init-button").onclick = () => {
 	document.body.appendChild(new_grid);
 	F_CL = true;
 	PLAY = true;
+	FLAG = false;
 }

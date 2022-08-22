@@ -1,3 +1,9 @@
+button {
+	font-size: 130%;
+	border: 0px;
+	border-radius: 2px;
+}
+
 #init-button {
 	display: block;
 	margin: 10px auto;
@@ -42,4 +48,22 @@
 
 .grid-button:active {
 	background-color: #c06030;
+}
+
+.flag-button {
+	background-color: #5600ab;
+	color: #ff44a1;
+	grid-row: -2;
+	grid-column: 0;
+	width: 40px;
+	height: 40px
+}
+
+.flagged-button {
+	color: #5600ab;
+	background-color: #ff44a1;
+	grid-row: -2;
+	grid-column: 0;
+	width: 40px;
+	height: 40px
 }
