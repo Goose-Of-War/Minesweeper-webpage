@@ -17,7 +17,7 @@ This time, I'll be using HTML/CSS for front-end and JS for back-end. This projec
 - ~~Made Buttons respond w.r.t. grid~~
 - Proper "Game Over/You Win" Mechanism
 - ~~Added Flag feature~~
-- Second Click
+- ~~Second Click~~
 - Modes(?)
 
 ## 

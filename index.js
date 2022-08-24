@@ -1,10 +1,21 @@
 let ROWS = 12, COLS = 10, NMIN = 16;
 let GRID = {}, F_CL = true; PLAY = false; FLAG = false;
+let unopened;
 
 max = (a, b) => (a > b) ? a : b;
 min = (a, b) => (a < b) ? a : b;
 abs = (x) => (x >= 0) ? x : -x;
 grd = (r, c) => GRID[`${r} ${c}`]
+
+function check_surroundings(row, col, property) {
+	let count = 0;
+	for (let i = max(row-1, 1); i <= min(row+1, ROWS); i++){
+		for (let j = max(col-1, 1); j <= min(col+1, COLS); j++) {
+			if (grd(i, j)[property] && !(i == row && j == col)) count++;
+		}
+	}
+	return count;
+}
 
 function first_click(row, col) {
 	let mine_locn = [];
@@ -25,7 +36,12 @@ function first_click(row, col) {
 	console.log(mine_locn);
 }
 
-function click(row, col) {
+function click(row, col, recursed = 0) {
+	//if first time, initialization
+	if (F_CL) {
+		F_CL = false;
+		first_click(row, col);
+	}
 	//no playing after game over
 	if (!PLAY) {
 		console.log("Click [Redo]");
@@ -33,15 +49,20 @@ function click(row, col) {
 	}
 	//no clicking clicked button
 	if (grd(row, col).opened) {
-		console.log("Repeated click");
+		if (check_surroundings(row, col, 'flagged') == grd(row, col).btn.innerHTML && grd(row, col).second_clicked == false) {
+			let temp_flag = FLAG;
+			FLAG = false;
+			grd(row, col).second_clicked = true;
+			for (let r = max(1, row-1); r <= min(row+1, ROWS); r++ ) {
+				for (let c = max(1, col-1); c <= min(col+1, COLS); c++) {
+					if (row != r || col != c) click(r, c, true);
+				}
+			}
+			FLAG = temp_flag;
+		}
 		return;
 	};
 	console.log(`Clicked: (${row}, ${col})`);
-	//if first time, initialization
-	if (F_CL) {
-		F_CL = false;
-		first_click(row, col);
-	}
 	//flag
 	if (FLAG){
 		grd(row, col).btn.innerHTML = (grd(row, col).btn.innerHTML == "F") ? "" : "F";
@@ -60,6 +81,7 @@ function click(row, col) {
 				if (!grd(r, c).flagged && grd(r, c).mine) {
 					grd(r, c).btn.style.backgroundColor = "#d3d";
 					grd(r, c).btn.innerHTML = "X";
+					grd(r, c).btn.opened = true;
 				}
 			}
 		}
@@ -67,15 +89,12 @@ function click(row, col) {
 		return;
 	}
 	//ple like a pleb
-	let count = 0;
-	for (let i = max(row-1, 1); i <= min(row+1, ROWS); i++){
-		for (let j = max(col-1, 1); j <= min(col+1, COLS); j++) {
-			if (grd(i, j).mine && !(i == row && j == col)) count++;
-		}
-	}
+	let count = check_surroundings(row, col, 'mine')
 	grd(row, col).btn.innerHTML = `${count}`;
 	grd(row, col).neighbour = count;
 	grd(row, col).opened = true;
+	if (count == 0) click(row, col, recursed++);
+	unopened -= 1;
 }
 
 //start button function
@@ -114,6 +133,7 @@ window.document.getElementById("init-button").onclick = () => {
 			GRID[`${row+1} ${col+1}`] = {
 				btn: grid_button,
 				opened: false,
+				second_clicked: false,
 				flagged: false,
 				mine: false
 			}
@@ -123,4 +143,5 @@ window.document.getElementById("init-button").onclick = () => {
 	F_CL = true;
 	PLAY = true;
 	FLAG = false;
+	unopened = ROWS * COLS;
 }
