@@ -20,6 +20,8 @@ This time, I'll be using HTML/CSS for front-end and JS for back-end. This projec
 - ~~Second Click~~
 - Modes(?)
 
+(Not sure if anyone is even reading this, but this one is currently going to be shelved.)
+
 ## 
 Until later
 
