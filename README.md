@@ -20,9 +20,7 @@ This time, I'll be using HTML/CSS for front-end and JS for back-end. This projec
 - ~~Second Click~~
 - Modes(?)
 
-(Not sure if anyone is even reading this, but this one is currently going to be shelved.)
+#
+So... this repo _did_ get shelved, as I mentioned in my past commit. Welp, anyone seeing this can add their own touch of stuff. I mean, considering that the majority of it is like, cleared, it's kind of safe to say that there isn't much to work on except for the styles and the alerts and... I'll let you think about it (totally not me running out of things I can think of to improve in this repository)
 
-## 
-Until later
-
-Honk
+Feel free to fork this repository, edit some stuff and send me a PR (or not, up to you)
